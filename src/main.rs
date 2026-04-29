@@ -4,6 +4,7 @@
 
 mod app;
 mod window;
+#[cfg(feature = "renderer")]
 mod renderer;
 mod plugin;
 mod fs;

@@ -25,6 +25,11 @@ cargo --version
 
 ### Шаг 2: Установка системных зависимостей
 
+**Arch Linux/Manjaro:**
+```bash
+sudo pacman -S cmake gtk3 webkit2gtk openssl pkgconf base-devel
+```
+
 **Ubuntu/Debian:**
 ```bash
 sudo apt-get update
@@ -193,9 +198,39 @@ cargo clippy
 
 ## 🔧 Решение проблем
 
-### Ошибка: "Ultralight SDK not found"
+### Ошибка: "Ultralight SDK not found" или проблемы с ultralight-sys
 
-Ultralight SDK требуется для рендеринга. Скачайте с https://ultralight.dev/ и следуйте инструкциям по установке.
+Официальный репозиторий Ultralight требует **ручной установки SDK**:
+
+1. Скачайте SDK с https://github.com/ultralight-ux/Ultralight/releases
+2. Распакуйте в `/opt/ultralight` (Linux) или `C:\Ultralight` (Windows)
+3. Установите переменные окружения:
+   ```bash
+   export ULTRALIGHT_SDK_PATH=/opt/ultralight
+   export LD_LIBRARY_PATH=$ULTRALIGHT_SDK_PATH/lib:$LD_LIBRARY_PATH
+   ```
+4. Соберите проект с флагом:
+   ```bash
+   cargo build --features renderer
+   ```
+
+**Альтернатива:** Используйте базовую сборку без рендерера (по умолчанию):
+```bash
+cargo build
+cargo run
+```
+
+### Ошибка компиляции на Arch Linux
+
+Убедитесь, что установлены все зависимости:
+```bash
+sudo pacman -S cmake gtk3 webkit2gtk openssl pkgconf base-devel
+```
+
+Если проблема с webkit2gtk, попробуйте:
+```bash
+sudo pacman -S webkit2gtk-4.1  # для новой версии
+```
 
 ### Ошибка компиляции на Linux
 

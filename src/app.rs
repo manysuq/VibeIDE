@@ -2,6 +2,7 @@
 
 use crate::config::Config;
 use crate::window::WindowManager;
+#[cfg(feature = "renderer")]
 use crate::renderer::Renderer;
 use crate::plugin::PluginHost;
 use crate::fs::FileSystem;
@@ -12,6 +13,7 @@ use log::info;
 pub struct Application {
     config: Config,
     window_manager: WindowManager,
+    #[cfg(feature = "renderer")]
     renderer: Renderer,
     plugin_host: PluginHost,
     file_system: FileSystem,
@@ -23,6 +25,7 @@ impl Application {
         info!("Initializing application...");
         
         let window_manager = WindowManager::new()?;
+        #[cfg(feature = "renderer")]
         let renderer = Renderer::new()?;
         let plugin_host = PluginHost::new(&config)?;
         let file_system = FileSystem::new();
@@ -30,6 +33,7 @@ impl Application {
         Ok(Self {
             config,
             window_manager,
+            #[cfg(feature = "renderer")]
             renderer,
             plugin_host,
             file_system,
@@ -44,7 +48,11 @@ impl Application {
         self.plugin_host.load_all_plugins().await?;
         
         // Create main window
+        #[cfg(feature = "renderer")]
         self.window_manager.create_main_window(&self.renderer)?;
+        
+        #[cfg(not(feature = "renderer"))]
+        self.window_manager.create_main_window()?;
         
         // Start event loop
         self.event_loop().await?;
