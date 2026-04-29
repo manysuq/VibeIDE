@@ -9,8 +9,10 @@ license = "MIT"
 # Window management
 winit = "0.29"
 
-# Ultralight bindings
-ultralight-sys = { git = "https://github.com/ultralight-ux/ultralight", optional = true }
+# Ultralight bindings (официальный репозиторий)
+# Примечание: требуется ручная установка Ultralight SDK
+ultralight-sys = { git = "https://github.com/ultralight-ux/Ultralight", optional = true }
+ultralight = { git = "https://github.com/ultralight-ux/Ultralight", optional = true }
 
 # JSON handling
 serde = { version = "1.0", features = ["derive"] }
@@ -38,9 +40,13 @@ anyhow = "1.0"
 dirs = "5.0"
 uuid = { version = "1.0", features = ["v4"] }
 
+# Alternative: use webview if ultralight fails
+webview = { version = "0.10", optional = true }
+
 [features]
-default = ["renderer"]
-renderer = [] # Ultralight rendering
+default = [] # По умолчанию без рендерера (для быстрой сборки)
+renderer = ["ultralight", "ultralight-sys"] # Ultralight rendering (требует ручной установки SDK)
+webview-backend = ["webview"] # Альтернативный бэкенд через webview
 dev = [] # Development mode with hot-reload
 
 [[bin]]
