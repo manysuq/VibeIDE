@@ -1,0 +1,54 @@
+[package]
+name = "ultralight_code"
+version = "0.1.0"
+edition = "2021"
+description = "Lightweight VS Code alternative using Rust + Ultralight with VS Code plugin support"
+license = "MIT"
+
+[dependencies]
+# Window management
+winit = "0.29"
+
+# Ultralight bindings
+ultralight-sys = { git = "https://github.com/ultralight-ux/ultralight", optional = true }
+
+# JSON handling
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# File system utilities
+notify = "6.1"
+walkdir = "2.4"
+
+# Plugin runtime (QuickJS for lightweight JS execution)
+rquickjs = { version = "0.5", features = ["macro"] }
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Cross-platform utilities
+dirs = "5.0"
+uuid = { version = "1.0", features = ["v4"] }
+
+[features]
+default = ["renderer"]
+renderer = [] # Ultralight rendering
+dev = [] # Development mode with hot-reload
+
+[[bin]]
+name = "ultralight_code"
+path = "src/main.rs"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+strip = true
